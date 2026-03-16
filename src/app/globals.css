@@ -2,42 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: #3b82f6;
-  --primary-dark: #1d4ed8;
-  --accent: #d946ef;
-  --background: #ffffff;
-  --foreground: #0f172a;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Inter, system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  @apply bg-white text-gray-900;
 }
 
-@layer components {
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0;
+    @apply bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 px-8 rounded-full
+           transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-105
+           focus:outline-none focus:ring-4 focus:ring-indigo-300 active:scale-95;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-blue-600 bg-white border-2 border-blue-600 hover:bg-blue-50 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0;
-  }
-
-  .section-heading {
-    @apply text-3xl md:text-4xl font-bold text-slate-900 text-center;
-  }
-
-  .section-subheading {
-    @apply text-lg text-slate-600 text-center max-w-2xl mx-auto mt-4;
-  }
-
-  .card {
-    @apply bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-200;
+    @apply border-2 border-indigo-600 text-indigo-600 font-semibold py-3 px-8 rounded-full
+           transition-all duration-300 hover:bg-indigo-600 hover:text-white
+           focus:outline-none focus:ring-4 focus:ring-indigo-300 active:scale-95;
   }
 }

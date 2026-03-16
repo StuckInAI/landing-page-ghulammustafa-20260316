@@ -1,34 +1,26 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "NexaFlow — Streamline Your Workflow",
+  title: 'LaunchPad — Build Faster, Ship Smarter',
   description:
-    "NexaFlow helps teams collaborate faster, automate repetitive tasks, and ship products that customers love. Start your free trial today.",
-  keywords: "workflow, productivity, collaboration, automation, project management",
+    'LaunchPad helps modern teams build, ship, and scale products faster than ever before. Start your free trial today.',
+  keywords: 'productivity, SaaS, team collaboration, project management',
   openGraph: {
-    title: "NexaFlow — Streamline Your Workflow",
+    title: 'LaunchPad — Build Faster, Ship Smarter',
     description:
-      "NexaFlow helps teams collaborate faster, automate repetitive tasks, and ship products that customers love.",
-    type: "website"
-  }
+      'LaunchPad helps modern teams build, ship, and scale products faster than ever before.',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
-  children
-}: {
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en">
       <body className="antialiased">{children}</body>
     </html>
   );
