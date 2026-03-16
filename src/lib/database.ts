@@ -1,35 +1,27 @@
-import 'reflect-metadata';
-import { DataSource } from 'typeorm';
-import { Subscriber } from './entities/Subscriber';
-import path from 'path';
-import fs from 'fs';
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { Todo } from "../entities/Todo";
+import path from "path";
 
-const dbPath = process.env.DATABASE_PATH || './data/database.sqlite';
-const absoluteDbPath = path.isAbsolute(dbPath)
-  ? dbPath
-  : path.join(process.cwd(), dbPath);
+const DB_PATH = process.env.DATABASE_PATH
+  ? path.resolve(process.env.DATABASE_PATH)
+  : path.resolve(process.cwd(), "database.sqlite");
 
-const dbDir = path.dirname(absoluteDbPath);
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-
-export const AppDataSource = new DataSource({
-  type: 'better-sqlite3',
-  database: absoluteDbPath,
-  synchronize: true,
-  logging: false,
-  entities: [Subscriber],
-  migrations: [],
-  subscribers: [],
-});
-
-let initialized = false;
+let dataSource: DataSource | null = null;
 
 export async function getDataSource(): Promise<DataSource> {
-  if (!initialized) {
-    await AppDataSource.initialize();
-    initialized = true;
+  if (dataSource && dataSource.isInitialized) {
+    return dataSource;
   }
-  return AppDataSource;
+
+  dataSource = new DataSource({
+    type: "better-sqlite3",
+    database: DB_PATH,
+    entities: [Todo],
+    synchronize: true,
+    logging: process.env.NODE_ENV === "development",
+  });
+
+  await dataSource.initialize();
+  return dataSource;
 }
