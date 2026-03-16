@@ -1,14 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
-import 'reflect-metadata';
+import "reflect-metadata";
+import { NextRequest, NextResponse } from "next/server";
+import { getDataSource } from "@/lib/database";
+import { Subscriber } from "@/lib/entities/Subscriber";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email } = body;
 
-    if (!email || typeof email !== 'string') {
+    if (!email || typeof email !== "string") {
       return NextResponse.json(
-        { success: false, message: 'Email is required.' },
+        { error: "Email is required" },
         { status: 400 }
       );
     }
@@ -16,36 +18,39 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, message: 'Invalid email address.' },
+        { error: "Invalid email address" },
         { status: 400 }
       );
     }
 
-    const { getDataSource } = await import('@/lib/database');
-    const { Subscriber } = await import('@/lib/entities/Subscriber');
-
     const dataSource = await getDataSource();
-    const subscriberRepo = dataSource.getRepository(Subscriber);
+    const subscriberRepository = dataSource.getRepository(Subscriber);
 
-    const existing = await subscriberRepo.findOne({ where: { email } });
+    const existing = await subscriberRepository.findOne({
+      where: { email: email.toLowerCase().trim() }
+    });
+
     if (existing) {
       return NextResponse.json(
-        { success: false, message: 'You are already subscribed!' },
-        { status: 409 }
+        { message: "You are already subscribed!" },
+        { status: 200 }
       );
     }
 
-    const subscriber = subscriberRepo.create({ email });
-    await subscriberRepo.save(subscriber);
+    const subscriber = subscriberRepository.create({
+      email: email.toLowerCase().trim()
+    });
+
+    await subscriberRepository.save(subscriber);
 
     return NextResponse.json(
-      { success: true, message: 'Thank you for subscribing!' },
+      { message: "Successfully subscribed! Welcome aboard." },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Subscribe error:', error);
+    console.error("Subscribe error:", error);
     return NextResponse.json(
-      { success: false, message: 'Something went wrong. Please try again.' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

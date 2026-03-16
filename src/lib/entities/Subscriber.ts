@@ -1,7 +1,7 @@
-import 'reflect-metadata';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import "reflect-metadata";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 
-@Entity()
+@Entity("subscribers")
 export class Subscriber {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -10,5 +10,5 @@ export class Subscriber {
   email!: string;
 
   @CreateDateColumn()
-  subscribedAt!: Date;
+  createdAt!: Date;
 }
