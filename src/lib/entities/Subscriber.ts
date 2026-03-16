@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
-@Entity('subscribers')
+@Entity()
 export class Subscriber {
   @PrimaryGeneratedColumn()
   id!: number;

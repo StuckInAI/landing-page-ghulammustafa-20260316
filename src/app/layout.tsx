@@ -1,27 +1,30 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
+const inter = Inter({ subsets: ['latin'] });
+
 export const metadata: Metadata = {
-  title: 'LaunchPad — Build Faster, Ship Smarter',
-  description:
-    'LaunchPad helps modern teams build, ship, and scale products faster than ever before. Start your free trial today.',
-  keywords: 'productivity, SaaS, team collaboration, project management',
+  title: 'LaunchPad — Build Products That Matter',
+  description: 'The all-in-one platform to launch, grow, and scale your next big idea. Join thousands of builders already using LaunchPad.',
+  keywords: 'SaaS, product launch, startup, growth, analytics',
   openGraph: {
-    title: 'LaunchPad — Build Faster, Ship Smarter',
-    description:
-      'LaunchPad helps modern teams build, ship, and scale products faster than ever before.',
+    title: 'LaunchPad — Build Products That Matter',
+    description: 'The all-in-one platform to launch, grow, and scale your next big idea.',
     type: 'website',
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className="antialiased">{children}</body>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.className} bg-white text-gray-900`}>
+        {children}
+      </body>
     </html>
   );
 }

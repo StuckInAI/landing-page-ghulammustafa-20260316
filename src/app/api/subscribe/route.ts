@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json(
-        { error: 'Valid email is required' },
+        { error: 'Email is required' },
         { status: 400 }
       );
     }
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: 'Invalid email format' },
+        { error: 'Invalid email address' },
         { status: 400 }
       );
     }
@@ -26,31 +26,25 @@ export async function POST(request: NextRequest) {
     const dataSource = await getDataSource();
     const subscriberRepository = dataSource.getRepository(Subscriber);
 
-    const existingSubscriber = await subscriberRepository.findOne({
-      where: { email: email.toLowerCase().trim() },
-    });
-
-    if (existingSubscriber) {
+    const existing = await subscriberRepository.findOne({ where: { email } });
+    if (existing) {
       return NextResponse.json(
-        { message: 'You are already subscribed!' },
-        { status: 200 }
+        { error: 'This email is already subscribed' },
+        { status: 409 }
       );
     }
 
-    const subscriber = subscriberRepository.create({
-      email: email.toLowerCase().trim(),
-    });
-
+    const subscriber = subscriberRepository.create({ email });
     await subscriberRepository.save(subscriber);
 
     return NextResponse.json(
-      { message: 'Successfully subscribed!' },
+      { message: 'Successfully subscribed! Welcome aboard.' },
       { status: 201 }
     );
   } catch (error) {
     console.error('Subscribe error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'An unexpected error occurred. Please try again.' },
       { status: 500 }
     );
   }

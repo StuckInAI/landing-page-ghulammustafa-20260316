@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss';
+import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
@@ -10,29 +10,33 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50: '#f0f4ff',
-          100: '#e0e9ff',
-          200: '#c7d7fe',
-          300: '#a5b8fd',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
         },
         accent: {
-          400: '#fb923c',
-          500: '#f97316',
-          600: '#ea580c',
+          50: '#fdf4ff',
+          100: '#fae8ff',
+          200: '#f5d0fe',
+          300: '#f0abfc',
+          400: '#e879f9',
+          500: '#d946ef',
+          600: '#c026d3',
+          700: '#a21caf',
+          800: '#86198f',
+          900: '#701a75',
         }
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
       animation: {
-        'fade-in': 'fadeIn 0.6s ease-out',
-        'slide-up': 'slideUp 0.6s ease-out',
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
@@ -47,6 +51,6 @@ const config: Config = {
     },
   },
   plugins: [],
-};
+}
 
-export default config;
+export default config
