@@ -1,7 +1,8 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: 'standalone',
   experimental: {
-    serverComponentsExternalPackages: ["typeorm", "better-sqlite3"]
+    serverComponentsExternalPackages: ['typeorm', 'better-sqlite3', 'reflect-metadata']
   }
 };
 

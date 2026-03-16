@@ -1,27 +1,43 @@
 FROM node:20-alpine AS base
 
-FROM base AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN apk add --no-cache python3 make g++ && npm ci
+RUN apk add --no-cache libc6-compat python3 make g++
 
-FROM base AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+
+COPY package.json package-lock.json ./
+
+RUN npm i
+
 COPY . .
+
+RUN mkdir -p data
+
 RUN npm run build
 
-FROM base AS runner
+FROM node:20-alpine AS runner
+
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
+
 ENV NODE_ENV=production
+ENV DATABASE_PATH=./data/database.sqlite
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
+
+COPY --from=base /app/public ./public
+COPY --from=base /app/.next/standalone ./
+COPY --from=base /app/.next/static ./.next/static
+COPY --from=base /app/node_modules ./node_modules
+
+RUN mkdir -p data && chown -R nextjs:nodejs data
+
 USER nextjs
+
 EXPOSE 3000
+
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+
 CMD ["node", "server.js"]

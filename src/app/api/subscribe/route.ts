@@ -1,19 +1,28 @@
-import { NextRequest, NextResponse } from "next/server";
-import "reflect-metadata";
-import { getDataSource } from "@/lib/database";
-import { Subscriber } from "@/entities/Subscriber";
+import { NextRequest, NextResponse } from 'next/server';
+import 'reflect-metadata';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email } = body as { email?: string };
+    const { email } = body;
 
-    if (!email || !email.includes("@")) {
+    if (!email || typeof email !== 'string') {
       return NextResponse.json(
-        { error: "Please provide a valid email address." },
+        { success: false, message: 'Email is required.' },
         { status: 400 }
       );
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid email address.' },
+        { status: 400 }
+      );
+    }
+
+    const { getDataSource } = await import('@/lib/database');
+    const { Subscriber } = await import('@/lib/entities/Subscriber');
 
     const dataSource = await getDataSource();
     const subscriberRepo = dataSource.getRepository(Subscriber);
@@ -21,8 +30,8 @@ export async function POST(request: NextRequest) {
     const existing = await subscriberRepo.findOne({ where: { email } });
     if (existing) {
       return NextResponse.json(
-        { message: "You are already subscribed!" },
-        { status: 200 }
+        { success: false, message: 'You are already subscribed!' },
+        { status: 409 }
       );
     }
 
@@ -30,13 +39,13 @@ export async function POST(request: NextRequest) {
     await subscriberRepo.save(subscriber);
 
     return NextResponse.json(
-      { message: "Successfully subscribed!" },
+      { success: true, message: 'Thank you for subscribing!' },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Subscribe error:", error);
+    console.error('Subscribe error:', error);
     return NextResponse.json(
-      { error: "Internal server error. Please try again." },
+      { success: false, message: 'Something went wrong. Please try again.' },
       { status: 500 }
     );
   }

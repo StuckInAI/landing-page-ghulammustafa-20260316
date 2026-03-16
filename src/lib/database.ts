@@ -1,27 +1,35 @@
-import "reflect-metadata";
-import { DataSource } from "typeorm";
-import { Subscriber } from "@/entities/Subscriber";
-import path from "path";
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
+import { Subscriber } from './entities/Subscriber';
+import path from 'path';
+import fs from 'fs';
 
-let dataSource: DataSource | null = null;
+const dbPath = process.env.DATABASE_PATH || './data/database.sqlite';
+const absoluteDbPath = path.isAbsolute(dbPath)
+  ? dbPath
+  : path.join(process.cwd(), dbPath);
+
+const dbDir = path.dirname(absoluteDbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
+export const AppDataSource = new DataSource({
+  type: 'better-sqlite3',
+  database: absoluteDbPath,
+  synchronize: true,
+  logging: false,
+  entities: [Subscriber],
+  migrations: [],
+  subscribers: [],
+});
+
+let initialized = false;
 
 export async function getDataSource(): Promise<DataSource> {
-  if (dataSource && dataSource.isInitialized) {
-    return dataSource;
+  if (!initialized) {
+    await AppDataSource.initialize();
+    initialized = true;
   }
-
-  const dbPath = process.env.DATABASE_PATH
-    ? path.resolve(process.cwd(), process.env.DATABASE_PATH)
-    : path.resolve(process.cwd(), "data", "landing.sqlite");
-
-  dataSource = new DataSource({
-    type: "better-sqlite3",
-    database: dbPath,
-    synchronize: true,
-    logging: false,
-    entities: [Subscriber],
-  });
-
-  await dataSource.initialize();
-  return dataSource;
+  return AppDataSource;
 }

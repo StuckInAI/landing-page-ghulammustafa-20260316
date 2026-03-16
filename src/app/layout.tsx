@@ -1,13 +1,9 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "NextLaunch - Build Faster, Ship Smarter",
-  description:
-    "The modern platform for teams who want to ship high-quality products faster than ever before.",
+  title: 'LaunchPad — Build Something Amazing',
+  description: 'The modern platform to launch your next big idea. Fast, reliable, and beautiful.',
 };
 
 export default function RootLayout({
@@ -17,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

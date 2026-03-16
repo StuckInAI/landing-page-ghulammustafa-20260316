@@ -1,16 +1,18 @@
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
-import Testimonials from "@/components/Testimonials";
-import CallToAction from "@/components/CallToAction";
-import Footer from "@/components/Footer";
+import Hero from '@/components/Hero';
+import Features from '@/components/Features';
+import Testimonials from '@/components/Testimonials';
+import Newsletter from '@/components/Newsletter';
+import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main>
+      <Navbar />
       <Hero />
       <Features />
       <Testimonials />
-      <CallToAction />
+      <Newsletter />
       <Footer />
     </main>
   );
